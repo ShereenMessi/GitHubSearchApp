@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,8 +18,21 @@ import java.util.List;
  */
 
 public class GitArrayAdapter extends ArrayAdapter<ItemsItem> {
+  private   List<ItemsItem> items=new ArrayList<>();
+
+    public void setItems(List<ItemsItem> items) {
+        this.items = items;
+    }
+
+    @Nullable
+    @Override
+    public ItemsItem getItem(int position) {
+        return items.get(position);
+    }
+
     public GitArrayAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<ItemsItem> objects) {
         super(context, resource, objects);
+        items=objects;
     }
 
     @NonNull
@@ -52,4 +66,5 @@ public class GitArrayAdapter extends ArrayAdapter<ItemsItem> {
         TextView OwnerName;
 
     }
+
 }

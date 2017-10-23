@@ -9,6 +9,26 @@
         android:orientation="vertical"
         tools:context="com.example.android.githubsearchapp.MainActivity">
 
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary">
+
+            <EditText
+                android:id="@+id/search_edit_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <Button
+                android:padding="4dp"
+                android:id="@+id/search_button"
+                android:background="@drawable/ic_search_black_24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
         <ListView
             android:id="@+id/list_view"
             android:layout_width="match_parent"

@@ -1,6 +1,9 @@
 package com.example.android.githubsearchapp;
 
-public class ItemsItem{
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class ItemsItem implements Parcelable{
 	private int stargazersCount;
 	private String pushedAt;
 	private String subscriptionUrl;
@@ -718,4 +721,14 @@ public class ItemsItem{
 			",forks_count = '" + forksCount + '\'' + 
 			"}";
 		}
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+
+    }
 }

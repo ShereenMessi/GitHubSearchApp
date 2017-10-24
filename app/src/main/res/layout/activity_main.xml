@@ -19,14 +19,16 @@
                 android:id="@+id/search_edit_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:imeOptions="actionSearch"
+                android:inputType="text"/>
 
             <Button
-                android:padding="4dp"
                 android:id="@+id/search_button"
-                android:background="@drawable/ic_search_black_24dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_search_black_24dp"
+                android:padding="4dp" />
         </LinearLayout>
 
         <ListView

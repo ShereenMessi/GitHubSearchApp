@@ -4,11 +4,14 @@ import android.databinding.DataBindingUtil;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.widget.TextView;
 
 import com.example.android.githubsearchapp.databinding.ActivityMainBinding;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,6 +19,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding;
@@ -25,6 +29,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        //hide the keyboard when the edittext is not focused
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
         binding.searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -32,23 +39,42 @@ public class MainActivity extends AppCompatActivity {
                 if (!searchStr.isEmpty()) {
                     binding.searchButton.setEnabled(false);
                     GitAsynTask task = new GitAsynTask();
-                    task.execute("https://api.github.com/search/repositories?q=" + binding.searchEditText.getText().toString() + "&sort=forks&order=desc");
+                    task.execute("https://api.github.com/search/repositories?q=" + searchStr + "&sort=forks&order=desc");
 
                 }
+            }
+        });
+        binding.searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    if (binding.searchButton.isEnabled())
+                        binding.searchButton.performClick();
+                }
+                return handled;
             }
         });
     }
 
     private void UpdateUi(Response response) {
         binding.searchButton.setEnabled(true);
+        List<ItemsItem> Items = response.getItems();
+
         if (adapter == null) {
-            adapter = new GitArrayAdapter(this, 0, response.getItems());
+            adapter = new GitArrayAdapter(this, 0, Items);
             binding.listView.setAdapter(adapter);
 
         } else {
             adapter.setItems(response.getItems());
             adapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
     }
 
     private class GitAsynTask extends AsyncTask<String, Void, String> {
@@ -98,8 +124,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             if (!result.isEmpty()) {
-                GsonBuilder gb = new GsonBuilder();
-                gb.serializeNulls();
                 Gson gson = new Gson();
                 Response response = gson.fromJson(result, Response.class);
                 UpdateUi(response);
@@ -107,6 +131,3 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 }
-
-
-

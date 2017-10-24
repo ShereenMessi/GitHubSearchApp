@@ -24,6 +24,10 @@ public class GitArrayAdapter extends ArrayAdapter<ItemsItem> {
         this.items = items;
     }
 
+    public List<ItemsItem> getItems() {
+        return items;
+    }
+
     @Nullable
     @Override
     public ItemsItem getItem(int position) {
